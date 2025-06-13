@@ -12,7 +12,7 @@ module CadiMenu
     end
 
     def client_fix_urls_js
-      {jsFix: "<script>console.log('Test')</script>"}
+      {jsFix: ""}
     end
 
     def fetch_fallback
