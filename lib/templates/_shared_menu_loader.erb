@@ -1,0 +1,108 @@
+<%
+APP_NAMES = {
+	company: 'Company App',
+	media: 'Media App',
+	travel: 'Travel App',
+	booking: 'Booking App',
+	payment: 'Payment App',
+	message: 'Message App',
+	orga: 'Orga App',
+	accomodation: 'Accomodation App',
+	destination: 'Accomodation App',
+	transfer: 'Transfer App',
+	teammanager: 'Team Manager App',
+	teamer: 'Teamer App',
+	beagency: 'Agency App',
+	mailing: 'Mailing/Marketing App',
+	administration: 'Hilfe',
+}.freeze
+%>
+<% if !(data[:current_path].split("?")[0].end_with?("/login") || data[:current_path].split("?")[0].end_with?("/user_sessions")) && data[:anbieter_farbe].present? && data[:base_color].present? %>
+  <style type="text/css">
+    <%
+      base_color = data[:base_color] || "rgba(0,162,204,1)"
+      anbieter_farbe = data[:anbieter_farbe] || "rgba(159,31,112,1)"
+    %>
+    .menu-background{
+      box-shadow: 0px 2px 14px 2px rgba(0, 0, 0, 0.2);
+      background: <%= base_color %>;
+      background: -moz-linear-gradient(-45deg, <%= base_color %> 20%, <%= anbieter_farbe %> 100%);
+      background: -webkit-linear-gradient(-45deg, <%= base_color %> 20%, <%= anbieter_farbe %> 100%);
+      background: linear-gradient(135deg, <%= base_color %> 20%, <%= anbieter_farbe %> 100%);
+    }
+  </style>
+  <script type="text/javascript">
+    console.log("Loader: <%= CadiMenu::VERSION %>")
+    const menuContent = <%= data[:menu_items].to_json %>
+    const menuUrl = `<%= data[:env] == 'development' ? 'http://localhost:3007' : '' %>/company/shared_menu<%= data[:env] == 'development' && data[:anbieter_id].present? ? "?anbieter_id=#{data[:anbieter_id]}&" : '?' %>source=${encodeURIComponent(window.location.pathname + window.location.search)}`
+    const fallback = <%= data[:fallback_menu].to_json %>
+    function loadMenu() {
+    	function applyMenu(obj) {
+    		$('#shared-menu-container').html(obj.html)
+    		$('#shared-menu-footer-content').html(obj.footerHtml)
+    		$('head').append(obj.css)
+    		$('head').append(obj.js)
+    	}
+    	function isValid(obj) {
+    		return obj && obj.html && obj.css && obj.js && obj.footerHtml
+    	}
+    	const key = `fallbackMenu_${window.location.pathname.split('/')[1]}`;
+    		const cachedStr = localStorage.getItem(key);
+    		if(localStorage.getItem("no_fallback")){
+    			console.log("Not using fallbacks")
+    		}else{
+    			if(cachedStr){
+    				try {
+    					const parsed = JSON.parse(cachedStr);
+    					if (isValid(parsed)) {
+    						applyMenu(parsed)
+    					}
+    				} catch { }
+    			}else{
+    				applyMenu(fallback)
+					document.documentElement.style.setProperty('--base-color', '<%= data[:base_color] %>');
+					document.documentElement.style.setProperty('--anbieter-farbe', '<%= data[:anbieter_farbe] %>');
+    				//Fallback URL fixes
+    				"<% if data[:env] != "development" %>"
+    					const allLinks = document.getElementsByTagName("a");
+    					const pattern = /http\:\/\/localhost\:(\d+)\//
+    					for(const elem of allLinks){
+    						if(elem.href.startsWith("http://localhost:")){
+    							elem.href.replace(pattern, "/")
+    						}
+    					}
+    				"<% end %>"
+    				const currentApp = document.getElementById("current-app-link");
+					<% current_app_url = data[:logout_path].split("/")[1]%>
+    				const appName = "<%= APP_NAMES[current_app_url.to_sym] || current_app_url %>"
+					const accountsDropdownContent = `<%= data[:accounts_dropdown] %>`;
+					const accountsDropdown = $("#shared-accounts-dropdown")
+    				try{
+    					if(currentApp){
+    						currentApp.href = "/<%= current_app_url %>"
+    						currentApp.textContent = appName
+    					}
+						if(accountsDropdown){
+							accountsDropdown.html(accountsDropdownContent)
+						}
+    				}catch{}
+    			}
+    		}
+    	$.ajax({
+    		url: menuUrl,
+    		type: 'GET',
+    		dataType: 'json',
+    		headers: { 'X-CSRF-Token': (document.querySelector('meta[name="csrf-token"]'))?.content ?? '' }
+    	}).success((ans) => {
+    		if (isValid(ans)) {
+    			applyMenu(ans)
+    			const str = JSON.stringify(ans);
+    			if (cachedStr !== str) {
+    				localStorage.setItem(key, str)
+    			}
+    		}
+    	})
+    }
+    loadMenu();
+  </script>
+<% end %>
