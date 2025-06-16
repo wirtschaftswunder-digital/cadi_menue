@@ -80,12 +80,6 @@ module CadiMenu
       if !(options[:nickname].present? && options[:nickname].is_a?(String))
         errors << "nickname"
       end
-      if !(options[:base_color].present? && options[:base_color].is_a?(String))
-        errors << "base_color"
-      end
-      if !(options[:anbieter_farbe].present? && options[:anbieter_farbe].is_a?(String))
-        errors << "anbieter_farbe"
-      end
       if !(options[:anbieter_id].present? && options[:anbieter_id].is_a?(Integer))
         errors << "anbieter_id"
       end
