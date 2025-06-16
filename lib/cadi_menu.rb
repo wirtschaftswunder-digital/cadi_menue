@@ -1,10 +1,9 @@
+require "cadi_menu/version"
 require "cadi_menu/engine"
 require "cadi_menu/fetcher"
 require "cadi_menu/menu_renderer"
 
 module CadiMenu
-  MIN_LOADER_VERSION = "v4.0.0"
-
   class << self
     attr_accessor :current_app_path, :company_url, :fallback_filepath
 
@@ -13,7 +12,7 @@ module CadiMenu
     end
 
     def client_fix_urls_js
-      {jsFix: "<script>console.log('Test')</script>"}
+      {jsFix: ""}
     end
 
     def fetch_fallback
