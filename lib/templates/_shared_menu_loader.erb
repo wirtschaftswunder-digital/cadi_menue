@@ -1,5 +1,5 @@
 <%
-APP_NAMES = {
+app_names = {
 	company: 'Company App',
 	media: 'Media App',
 	travel: 'Travel App',
@@ -74,7 +74,7 @@ APP_NAMES = {
     				"<% end %>"
     				const currentApp = document.getElementById("current-app-link");
 					<% current_app_url = data[:logout_path].split("/")[1]%>
-    				const appName = "<%= APP_NAMES[current_app_url.to_sym] || current_app_url %>"
+    				const appName = "<%= app_names[current_app_url.to_sym] || current_app_url %>"
 					const accountsDropdownContent = `<%= data[:accounts_dropdown] %>`;
 					const accountsDropdown = $("#shared-accounts-dropdown")
     				try{
