@@ -52,10 +52,10 @@ module CadiMenu
     ## - logout_path
     ## - env
     def render_menu(options = {})
-      ensure_valid_options(options)
       if options[:current_path].split("?")[0].end_with?("/login") || options[:current_path].split("?")[0].end_with?("/user_sessions")
         return ""
       end
+      ensure_valid_options(options)
       data = {
         current_path: options[:current_path],
         base_color: options[:base_color],
