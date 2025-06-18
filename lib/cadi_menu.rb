@@ -21,14 +21,16 @@ module CadiMenu
     end
 
     def build_accounts_dropdown_html(options)
-      links = ""
-      options[:anbieter_auswahl].each do |anbieter|
-        is_current_anbieter = anbieter[:id] == options[:anbieter_id]
-        link = "/#{options[:logout_path].split("/")[1]}/admin/users/change_anbieter?anbieter_id=#{anbieter[:id]}&id=#{options[:user_id]}&redirect=#{options[:current_path]}"
-        a_tag = "<a class='ui item #{is_current_anbieter ? "current-anbieter bold-font" : "black"}' href='#{link}' #{is_current_anbieter ? "style='color: #{options[:base_color]}'" : ''}>
-            <i class='fas fa-home fixed-icon'></i>#{anbieter[:name]}
-        </a>"
-        links << "#{a_tag}\n"
+      if options[:anbieter_auswahl].present?
+        links = ""
+        options[:anbieter_auswahl].each do |anbieter|
+          is_current_anbieter = anbieter[:id] == options[:anbieter_id]
+          link = "/#{options[:logout_path].split("/")[1]}/admin/users/change_anbieter?anbieter_id=#{anbieter[:id]}&id=#{options[:user_id]}&redirect=#{options[:current_path]}"
+          a_tag = "<a class='ui item #{is_current_anbieter ? "current-anbieter bold-font" : "black"}' href='#{link}' #{is_current_anbieter ? "style='color: #{options[:base_color]}'" : ''}>
+              <i class='fas fa-home fixed-icon'></i>#{anbieter[:name]}
+          </a>"
+          links << "#{a_tag}\n"
+        end
       end
       " #{links}
         <hr style='margin: 0 15px 0 15px; border-bottom-width: 0px;'>
@@ -83,9 +85,9 @@ module CadiMenu
       if !(options[:anbieter_id].present? && options[:anbieter_id].is_a?(Integer))
         errors << "anbieter_id"
       end
-      if !(options[:anbieter_auswahl].present? && options[:anbieter_auswahl].is_a?(Array))
-        errors << "anbieter_auswahl"
-      end
+      # if !(options[:anbieter_auswahl].present? && options[:anbieter_auswahl].is_a?(Array))
+      #   errors << "anbieter_auswahl"
+      # end
       if !(options[:logout_path].present? && options[:logout_path].is_a?(String))
         errors << "logout_path"
       end
