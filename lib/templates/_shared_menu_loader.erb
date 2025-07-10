@@ -35,7 +35,7 @@ app_names = {
     console.log("Loader: <%= CadiMenu::VERSION %>")
     const menuContent = <%= data[:menu_items].to_json %>
     const menuUrl = `<%= data[:env] == 'development' ? 'http://localhost:3007' : '' %>/company/shared_menu<%= data[:env] == 'development' && data[:anbieter_id].present? ? "?anbieter_id=#{data[:anbieter_id]}&" : '?' %>source=${encodeURIComponent(window.location.pathname + window.location.search)}`
-    const fallback = <%= data[:fallback_menu].to_json %>
+    const fallback = <%= ERB::Util.json_escape(data[:fallback_menu].to_json).html_safe %>
     function loadMenu() {
     	function applyMenu(obj) {
     		$('#shared-menu-container').html(obj.html)
