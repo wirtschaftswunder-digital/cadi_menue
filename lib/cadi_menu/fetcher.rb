@@ -7,6 +7,9 @@ module CadiMenu
       debug = false
       puts "[CadiMenu/Debug] attempting to get fallback, #{CadiMenu.company_url}" if debug
       begin
+        if CadiMenu.skip_fallback_request
+          raise "Skipped fallback request"
+        end
         response = HTTParty.get(CadiMenu.company_url, timeout: 5, verify: false)
         if response.code != 200
           raise "Invalid response status: #{response.code}"

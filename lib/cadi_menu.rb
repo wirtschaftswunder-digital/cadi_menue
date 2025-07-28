@@ -5,7 +5,7 @@ require "cadi_menu/menu_renderer"
 
 module CadiMenu
   class << self
-    attr_accessor :current_app_path, :company_url, :fallback_filepath
+    attr_accessor :current_app_path, :company_url, :fallback_filepath, :skip_fallback_request
 
     def configure
       yield self
