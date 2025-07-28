@@ -10,6 +10,7 @@ module CadiMenu
       CadiMenu.current_app_path ||= "company"
       CadiMenu.company_url ||= "#{Rails.env.development? ? "http://localhost:3007": ""}/company/shared_menu?source=#{CadiMenu.current_app_path}"
       CadiMenu.fallback_filepath ||= Rails.root.join("cadi_menu_fallback", "cached.json")
+      CadiMenu.skip_fallback_request ||= false
     end
   end
 end
