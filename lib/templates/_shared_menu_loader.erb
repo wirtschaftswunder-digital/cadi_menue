@@ -17,7 +17,7 @@ app_names = {
 	administration: 'Hilfe',
 }.freeze
 %>
-<% if !(data[:current_path].split("?")[0].end_with?("/login") || data[:current_path].split("?")[0].end_with?("/user_sessions")) && data[:anbieter_farbe].present? && data[:base_color].present? %>
+<% if !(data[:current_path].split("?")[0].end_with?("/login") || data[:current_path].split("?")[0].end_with?("/user_sessions")) %>
   <style type="text/css">
     <%
       base_color = data[:base_color] || "rgba(0,162,204,1)"
